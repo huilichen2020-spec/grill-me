@@ -43,7 +43,7 @@ Path: `~/Documents/Claude/Skills/{repo-name}/`
 | Repo | Path | Skills | Deploy method |
 |---|---|---|---|
 | **research-workspace-skills** | `~/Documents/Claude/Skills/research-workspace-skills/` | ra-workspace, ra-idea-incubator, ra-draft-editor, ra-paper-diagnose, ra-annotations-extractor, ra-paper-finalize, ra-paper-diagram, humanizer, innovation-diagnosis, download-research-articles | install.sh + .skill UI register |
-| **comms-hub-skills** | `~/Documents/Claude/Skills/comms-hub-skills/` | comms-hub, outreach-email, outreach-followup, calendar-invite, uoft-admin, signature-stamp, inbox-triage | install.sh + .skill UI register |
+| **comms-hub-skills** | `~/Documents/Claude/Skills/comms-hub-skills/` | ea-hub, ea-outreach-email, ea-outreach-followup, ea-calendar-invite, ea-admin-tasks, ea-mentee-scaffolding, ea-signature-stamp, ea-inbox-triage | install.sh + .skill UI register |
 | **grill-me** (this skill) | `~/Documents/Claude/Skills/grill-me/` | grill-me | install.sh + .skill UI register |
 
 ## Known Claude Code plugins

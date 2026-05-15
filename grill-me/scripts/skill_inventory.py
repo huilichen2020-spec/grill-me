@@ -145,8 +145,7 @@ def summarize_script(path: Path) -> dict:
 def find_cross_skill_refs(skill_dir: Path) -> list[str]:
     """Look across all .md files for mentions of OTHER skills."""
     other_skill_pattern = re.compile(
-        r"\b(ra-[a-z\-]+|comms-[a-z\-]+|outreach-[a-z\-]+|"
-        r"calendar-invite|signature-stamp|inbox-triage|uoft-admin|"
+        r"\b(ra-[a-z\-]+|ea-[a-z\-]+|"
         r"vix-trading-assistant|skill-creator|skill-refinement|"
         r"download-research-articles|humanizer|innovation-diagnosis|"
         r"docx|pptx|xlsx|pdf|canvas-design)\b"
