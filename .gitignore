@@ -1,3 +1,8 @@
 __pycache__/
 *.pyc
 .DS_Store
+
+# deploy.sh state + packaged bundles: never committed (the push leak-guard blocks dist/)
+maintenance/.deployed.json
+maintenance/.deployed-blobs
+dist/

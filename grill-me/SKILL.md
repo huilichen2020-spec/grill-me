@@ -1,6 +1,7 @@
 ---
 name: grill-me
-description: "Socratic interrogation skill — Claude STOPS doing the task and instead asks Huili questions one at a time (via AskUserQuestion popup) until the intent is precise enough to execute. Three auto-detected modes: (1) General — for plans/ideas/decisions/proposals (e.g., 'grill the plan you just gave me', 'grill me on whether to do X', 'grill me before I start'); (2) Decision-grill — for A-vs-B choices ('should I use X or Y', 'compare these options', 'X vs Y'); (3) Skill-iteration — for design/refinement of any custom skill ('grill ra-draft-editor', 'iterate on outreach-email', 'audit my skills', 'this skill isn't doing what I want'). Use when alignment matters more than speed — before high-stakes decisions, before invoking expensive workflows, before iterating on a misbehaving skill, when you've drafted a plan and want to stress-test it. Don't use for trivial tasks or when the user already knows exactly what they want."
+description: >
+  Socratic interrogation — Claude STOPS doing the task and asks Huili questions one at a time (AskUserQuestion popup) until intent is precise. Modes: (1) General — plans/ideas/decisions/proposals ('grill the plan you just gave me', 'grill me on whether to do X', 'grill me before I start', 'poke holes in this', 'stress-test my plan'); (2) Decision-grill — A-vs-B choices ('should I use X or Y', 'compare these options', 'X vs Y') when she wants to be questioned, not answered; (3) Skill-iteration — design/refinement of any custom skill ('grill ra-paper-editor', 'iterate on outreach-email', 'improve <skill>', 'this skill isn't doing what I want'); runs FIRST on any improve/iterate/refactor-a-skill ask. Use when alignment matters more than speed. Don't use for trivial tasks or when the user already knows exactly what they want. NOT: 'grill my paper/draft' or 'is this research idea worth doing' (ra-argument-architecture); unqualified 'audit my skills' (skill-refinement); ETF allocation (market-etf-briefing).
 ---
 
 # Grill Me — Socratic interrogation across three modes
@@ -19,8 +20,6 @@ iteration grilling).
 
 This skill is **the slow path on purpose**. Don't shortcut it by
 generating proposed answers — extract them from the user via questions.
-
----
 
 ## Mode auto-detection
 
@@ -45,11 +44,7 @@ When ambiguous (rare), default to General. General mode is harmless;
 the worst outcome is an extra question or two before the right path
 emerges.
 
----
-
 ## Universal mechanics (all three modes)
-
-These apply regardless of mode.
 
 ### Question delivery
 
@@ -91,14 +86,6 @@ Default range: **5-15 questions** total across waves. Go shorter if
 intent emerges quickly; longer if Wave 3 keeps surfacing new tension.
 Stop when you can write the summary without uncertainty.
 
-### Honesty
-
-Per workspace honesty rules (see ra-workspace if present): never
-fabricate questions to seem thorough; if you have what you need, stop
-and summarize.
-
----
-
 ## Stance — anti-sycophancy by default
 
 Your stance is interrogator, not validator. Across all three modes:
@@ -131,14 +118,8 @@ When a user's answer is vague, **detect the weakness type and ask a
 follow-up that targets it specifically** — don't move on to the next
 planned question.
 
-| Weakness | Example answer | Follow-up that targets it |
-|---|---|---|
-| **Overly broad** | "I want it to be interesting" | "Interesting *to whom*? Cog-sci theorists, methodologists, applied folks?" |
-| **Missing trigger / condition** | "Methods should be flexible" | "Flexible *when*? When the sample size shifts? When a measurement fails?" |
-| **Ambiguous action verb** | "Good methodology" / "user-friendly" | "What's the falsification criterion? What would make you reject it?" |
-| **No constraints / measurable** | "Strong contribution" | "Strong relative to which named prior work? Within what time-to-publication budget?" |
-| **Hedge stack** | "I think maybe it could probably..." | "Strip the hedges. State the claim. If you can't, the claim isn't formed yet." |
-| **Reasonable-sounding but generic** | "It'll be more rigorous" | "Name the specific operational difference vs the standard approach." |
+See `references/vague-answer-counters.md` for the weakness-type table (six types, example answers,
+targeted follow-ups) — read it the first time an answer comes back vague.
 
 This adds a **micro-loop within each wave**: ask → detect-weakness →
 counter-with-targeted-followup → only-then-advance. A single grilling
@@ -167,32 +148,16 @@ you can write the summary" rule.
       under which you'd flip)
 
 ### Skill-iteration
-- [ ] One specific failure case that triggered the iteration is named
-      with verbatim user input + verbatim Claude output
-- [ ] The trigger keywords / signals the new behavior would activate
-      on are listed (or "no new triggers" with reason)
-- [ ] A 1-line success test: "after this change, when I do X, the
-      skill will Y"
-- [ ] Whether this is a description fix, a workflow fix, or a new
-      reference is decided
+- [ ] Four exit items (named failure case, triggers, 1-line success test, fix type) —
+      listed in `references/mode-skill-iteration.md`.
 
 If a checklist item can't be satisfied, that's the next grilling
 target — not a reason to stop.
-
----
 
 ## Mode 1 — General (default)
 
 For **any plan, idea, decision, or proposal** that needs sharpening
 before execution.
-
-### When to invoke
-
-- Claude proposed a plan; user wants to stress-test it before saying go
-- User has a rough idea and wants to articulate it precisely
-- User is about to start a complex task and wants alignment first
-- High-stakes decisions where misalignment is costly (trade ideas,
-  research direction, design choices)
 
 ### Workflow
 
@@ -208,31 +173,13 @@ before execution.
 6. **Final summary** — see `references/output-formats.md` General mode
    template. Put it directly in chat (no file).
 
-### Output
-
-In-chat summary covering:
-- **What we agreed** (3-5 bullets — the precise version of the plan)
-- **Assumptions** (explicit; flagged verified or unverified)
-- **Risks** that emerged
-- **Decision points** (any "you'd revisit if X happens" conditions)
-- **Ready to execute?** prompt
-
-No file unless user says "save this." Some decisions warrant
-preservation (e.g., trade thesis with stop loss); save to chat root
-if a chat root exists.
-
----
+No file unless user says "save this." When to invoke + output contents:
+`references/mode-details.md`, read at the final-summary step (template in `references/output-formats.md`).
 
 ## Mode 2 — Decision-grill
 
 For **A vs B (or A vs B vs C) choices** where the user is weighing
 options.
-
-### When to invoke
-
-- "Should I use X or Y for [purpose]?"
-- "What's better — A or B?"
-- "Compare these two approaches"
 
 ### Workflow
 
@@ -247,103 +194,21 @@ options.
 5. **Recommend** based on what you learned. Show the reasoning,
    including the tradeoffs you couldn't fully resolve.
 
-### Output
-
-In-chat decision report:
-- **Options** (the 2+ choices, briefly)
-- **Dimensions you implicitly cared about** (surfaced via grilling)
-- **Tradeoffs** per dimension
-- **Recommended choice** with rationale
-- **Conditions to revisit** ("if X happens, switch to B")
-
-Save to file only if user says "save this" — typically high-stakes
-decisions (career, large purchase, research direction).
-
----
+In-chat decision report (contents: `references/mode-details.md`, read at the final-summary step; template:
+`references/output-formats.md`). Save to file only if user says "save this".
 
 ## Mode 3 — Skill-iteration
 
 For **designing or refining a custom skill**. Heavier mode with
 inventory + optional live-test.
 
-### When to invoke
-
-- User says "grill {skill-name}" or "iterate on {skill-name}"
-- User says "this skill isn't doing what I want"
-- User wants to audit a collection of skills
-
-### Workflow
-
-1. **Locate the skill.** Run `scripts/locate_skill.py {skill-name}`
-   to find:
-   - Active path (where the skill is currently running)
-   - Canonical repo path (where to apply fixes)
-   - Deploy method (install.sh + UI, manual edit, or read-only)
-
-2. **Inventory the skill.** Run `scripts/skill_inventory.py
-   {canonical-path}` to get:
-   - SKILL.md frontmatter + description length
-   - Reference files (titles + line counts + first-paragraph summary)
-   - Scripts (function signatures + docstrings)
-   - Cross-references to other skills
-   - Trigger phrases extracted from description
-   - Modes / commands / prefixes documented
-
-   This is the context packet for grilling.
-
-3. **Spec-grill (Waves 1-3).** Use `references/waves-skill.md` for
-   question templates:
-   - Wave 1 — basics: what problem, who's the user (Claude or human),
-     success criterion
-   - Wave 2 — ambiguity: command boundaries, trigger edge cases,
-     hard-rule vs strong-preference
-   - Wave 3 — blind spots: unstated assumptions, deliberate omissions,
-     past feedback that didn't change the spec
-
-4. **(Optional) Live-test grill.** Offer: "Want me to run this skill
-   on a real input and grill the output vs the spec?" If yes:
-   - User provides sample input
-   - Run the skill as designed
-   - **Spawn a fresh-context subagent via the Agent tool** — give it
-     the spec + the output, ask "where's the gap?"
-   - Fresh-context grader is critical: avoids the original generation's
-     blind spots
-   - Some skills have side effects (calendar-invite, signature-stamp);
-     warn before running and skip if user prefers spec-only grill
-
-5. **Gap synthesis.** Combine spec-grill answers + live-test
-   observations → produce structured grill report (see
-   `references/output-formats.md` Skill-iteration template).
-
-6. **Apply (or save report).** Manual review — present
-   recommendations; user accepts all / cherry-picks / saves report
-   only. **No auto-apply in v1** — too much trust required. After
-   accept, the workflow:
-   - Apply edits to the canonical repo
-   - Re-package as `.skill` (if applicable)
-   - Run `install.sh` to deploy
-   - Tell user to re-install via Claude UI (so the manifest registered
-     version updates)
-
-### Output
-
-Markdown file at:
-- `{chat-root}/REPORTS/REPORT-SKILL-GRILL_{date}_{skill-name}.md` if
-  in cowork with a chat root
-- `~/Downloads/skill-grill-reports/{date}-{skill-name}.md` otherwise
-
-Format: see `references/output-formats.md`.
-
-### Multi-skill batch (audit mode)
-
-When user says "audit my ra-* skills" or "audit all skills":
-1. List skills in scope (ask user to narrow if too many)
-2. For each: brief Wave-1-only spec-grill (3 questions max per skill)
-3. Aggregate: which skills feel right, which need iteration
-4. Output: workspace-level audit report identifying which skills to
-   deep-grill next
-
----
+**Read `references/mode-skill-iteration.md` before step 1** — full step detail, output
+paths, the multi-skill batch (audit mode) procedure, and the exit checklist. Skeleton:
+locate (`scripts/locate_skill.py`) → inventory (`scripts/skill_inventory.py`) →
+spec-grill Waves 1-3 (`references/waves-skill.md`) → optional live-test graded by a
+fresh-context subagent → gap synthesis → apply or save report. Hard rules: warn before
+live-testing a skill with side effects (calendar-invite, signature-stamp) and skip if the
+user prefers spec-only; **No auto-apply in v1** — too much trust required.
 
 ## When NOT to use grill-me
 
@@ -357,8 +222,6 @@ If you suspect grill-me would help but the user hasn't asked, you can
 suggest it once: "Want me to grill you on this before I start?" If
 they say no, just proceed.
 
----
-
 ## Reference files
 
 | File | Read when... |
@@ -368,13 +231,16 @@ they say no, just proceed.
 | `references/lens-library.md` | All modes — strategic/systems/psychological lenses for Wave 3 questions |
 | `references/skill-locations.md` | Mode 3 — registry of Huili's skill repos + deploy methods |
 | `references/output-formats.md` | All modes — output templates per mode |
-
----
+| `references/mode-details.md` | Modes 1-2 — when to invoke + output checklists |
+| `references/mode-skill-iteration.md` | Mode 3 — full workflow, output paths, batch audit, exit checklist |
+| `references/vague-answer-counters.md` | All modes — weakness-type table for vague answers |
 
 ## Honesty rules
 
-- Don't generate questions to look thorough — if you have enough,
-  stop and summarize.
+Per workspace honesty rules (see ra-workspace if present): never
+fabricate questions to seem thorough; if you have what you need, stop
+and summarize.
+
 - Don't propose an answer the user didn't give.
 - Don't capitulate when the user pushes back; if you have a real
   reason, restate it. Only revise if they provide new information.
@@ -388,3 +254,13 @@ they say no, just proceed.
 - Python 3 with stdlib (for the two scripts in `scripts/`)
 - Skill repos discovered via `scripts/locate_skill.py` (no fixed
   dependency; works with whatever's on disk)
+
+## Learning loop
+
+Read this skill's `GOTCHAS.md` before the first output of a session. At task end, if the
+session produced a correction from Huili, an approved judgment call, a repeated question, a
+repeated task shape, or a failure+fix — append ONE dated entry (format + promotion rules:
+`~/Documents/Claude/Skills/research-workspace-skills/ra-workspace/references/skill-learning-loop.md`).
+A lesson that fires twice becomes a stated default or named shortcut in this SKILL.md; say
+"Learned: ..." in the wrap-up whenever an entry is written. Never learn gate relaxations,
+credentials, or one-off context.

@@ -81,9 +81,9 @@ if user says "save this" or the decision is clearly high-stakes
 
 ---
 
-## Mode 3 — Skill-iteration (markdown file deliverable)
+## Mode 3 — Skill-iteration (report in chat; file on request)
 
-Always saved to file. Path:
+Delivered in chat by default (SOUL: no unasked .md files). When Huili picks "save report", the path is:
 - `{chat-root}/REPORTS/REPORT-SKILL-GRILL_{date}_{skill-name}.md` if
   in cowork with a chat root
 - `~/Downloads/skill-grill-reports/{date}-{skill-name}.md` otherwise
