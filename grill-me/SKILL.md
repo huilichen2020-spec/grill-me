@@ -1,7 +1,7 @@
 ---
 name: grill-me
 description: >
-  Socratic interrogation — Claude STOPS doing the task and asks Huili questions one at a time (AskUserQuestion popup) until intent is precise. Modes: (1) General — plans/ideas/decisions/proposals ('grill the plan you just gave me', 'grill me on whether to do X', 'grill me before I start', 'poke holes in this', 'stress-test my plan'); (2) Decision-grill — A-vs-B choices ('should I use X or Y', 'compare these options', 'X vs Y') when she wants to be questioned, not answered; (3) Skill-iteration — design/refinement of any custom skill ('grill ra-paper-editor', 'iterate on outreach-email', 'improve <skill>', 'this skill isn't doing what I want'); runs FIRST on any improve/iterate/refactor-a-skill ask. Use when alignment matters more than speed. Don't use for trivial tasks or when the user already knows exactly what they want. NOT: 'grill my paper/draft' or 'is this research idea worth doing' (ra-argument-architecture); unqualified 'audit my skills' (skill-refinement); ETF allocation (market-etf-briefing).
+  Socratic interrogation — Claude STOPS doing the task and asks Huili questions one at a time (AskUserQuestion popup) until intent is precise. Modes: (1) General — plans/ideas/decisions/proposals ('grill the plan you just gave me', 'grill me on whether to do X', 'grill me before I start', 'poke holes in this', 'stress-test my plan'); (2) Decision-grill — A-vs-B choices ('should I use X or Y', 'compare these options', 'X vs Y') when she wants to be questioned, not answered; (3) Skill-iteration — design/refinement of any custom skill ('grill ra-paper-editor', 'iterate on outreach-email', 'improve [skill]', 'this skill isn't doing what I want'); runs FIRST on any improve/iterate/refactor-a-skill ask. Use when alignment matters more than speed. Don't use for trivial tasks or when the user already knows exactly what they want. NOT: 'grill my paper/draft' or 'is this research idea worth doing' (ra-argument-architecture); unqualified 'audit my skills' (skill-refinement); ETF allocation (market-etf-briefing).
 ---
 
 # Grill Me — Socratic interrogation across three modes
@@ -50,9 +50,12 @@ emerges.
 
 - **One question at a time.** Never batch-ask.
 - **AskUserQuestion popup** — 2-4 multiple-choice options + Other. Never plain-text questions.
+- **Panel format — every option, every question.** Read `references/question-panel.md` before
+  the first question. Each option description = one line saying what the option means, then
+  a `Pros:` line, then a `Cons:` line (the app colors them green and orange). Recommended
+  option first, label ends with ` (Recommended)`.
 - **Concrete, not abstract.** Bad: "What are your goals?" Good: "What's the single failure mode you'd most regret?"
 - **Brief acknowledgement** of each answer (1-2 sentences max), then immediately the next question.
-- **Recommended answer pre-filled** when sensible — e.g., "If unsure, the conservative choice is option 2."
 
 ### Wave structure
 
@@ -226,6 +229,7 @@ they say no, just proceed.
 
 | File | Read when... |
 |---|---|
+| `references/question-panel.md` | All modes — before the first question; her panel format (Pros/Cons lines) and editable settings |
 | `references/waves-general.md` | Mode 1 — question templates for plans/ideas/decisions |
 | `references/waves-skill.md` | Mode 3 — question templates for skill design |
 | `references/lens-library.md` | All modes — strategic/systems/psychological lenses for Wave 3 questions |
